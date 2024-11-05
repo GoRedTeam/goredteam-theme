@@ -1,0 +1,67 @@
+{{- /*
+Renders a menu for the given menu ID.
+
+@context {page} page The current page.
+@context {string} menuID The menu ID.
+
+@example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+*/}}
+
+{{- $page := .page }}
+{{- $menuID := .menuID }}
+
+<header class="fixed top-0 left-0 right-0 bg-grt-black z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center group">
+        <span class="text-2xl text-bold text-grt-white group-hover:text-grt-red-500">GO </span>
+        <span class="text-2xl text-bold text-grt-red-500">RED </span>
+        <span class="text-2xl text-bold text-grt-white group-hover:text-grt-red-500">TEAM</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      {{- with index site.Menus $menuID }}
+        <nav class="flex items-center">
+          <ul class="flex space-x-6">
+            {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+          </ul>
+        </nav>
+      {{- end }}
+    </div>
+  </div>
+</header>
+
+{{- define "partials/inline/menu/walk.html" }}
+  {{- $page := .page }}
+  {{- range .menuEntries }}
+    {{- $attrs := dict "href" .URL }}
+    {{- if $page.IsMenuCurrent .Menu . }}
+      {{- $attrs = merge $attrs (dict "class" "text-grt-red-500 hover:text-grt-red-500") }}
+    {{- else if $page.HasMenuCurrent .Menu .}}
+      {{- $attrs = merge $attrs (dict "class" "text-grt-red-500 hover:text-grt-red-500") }}
+    {{- else }}
+      {{- $attrs = merge $attrs (dict "class" "text-grt-white hover:text-grt-red-500") }}
+    {{- end }}
+    {{- $name := .Name }}
+    {{- with .Identifier }}
+      {{- with T . }}
+        {{- $name = . }}
+      {{- end }}
+    {{- end }}
+    <li>
+      <a
+        {{- range $k, $v := $attrs }}
+          {{- with $v }}
+            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
+          {{- end }}
+        {{- end -}}
+      >{{ $name }}</a>
+      {{- with .Children }}
+        <ul class="absolute bg-grt-black mt-2 py-2 space-y-2 rounded shadow-lg">
+          {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+        </ul>
+      {{- end }}
+    </li>
+  {{- end }}
+{{- end }}

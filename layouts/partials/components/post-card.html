@@ -1,0 +1,74 @@
+<article class="group relative h-80 overflow-hidden bg-grt-dark-gray-700">
+    {{ if and .Site.Params.featuredImages (isset .Params "featured_image") }}
+        <div class="absolute inset-0">
+            <img 
+                src="{{ .Params.featured_image }}" 
+                alt="{{ .Title }}" 
+                class="object-cover w-full h-full"
+            >
+            <div class="absolute inset-0 bg-grt-dark-gray-900/70 transition-opacity group-hover:bg-grt-dark-gray-900/80"></div>
+        </div>
+    {{ end }}
+
+    <div class="relative h-full p-6 flex flex-col text-grt-white">
+        <!-- Category -->
+        {{ with .Params.category }}
+        <a href="/categories/{{ . | urlize }}" class="inline-block w-fit border border-grt-red-500 text-grt-red-500 px-3 py-1 text-xs uppercase tracking-wider transition-colors hover:bg-grt-red-500 hover:text-white">
+            {{ . }}
+        </a>
+        {{ end }}
+
+        <!-- Title -->
+        <h3 class="mt-4 text-xl font-bold text-grt-white">
+            <a href="{{ .RelPermalink }}" class="hover:text-grt-red-500 transition-colors">
+                {{ .Title }}
+            </a>
+        </h3>
+
+        <!-- Summary/Description -->
+        <p class="mt-2 text-sm text-grt-gray-300">
+            {{ with .Description }}
+                {{ . }}
+            {{ else }}
+                {{ .Summary | truncate 120 }}
+            {{ end }}
+        </p>
+
+        <!-- Metadata -->
+        <div class="mt-4 flex items-center gap-4 text-xs text-grt-gray-300">
+            {{ with .Params.author }}
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                {{ . }}
+            </span>
+            {{ end }}
+            
+            <time class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                {{ .Date.Format "Jan 2, 2006" }}
+            </time>
+
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ .ReadingTime }} min read
+            </span>
+        </div>
+
+        <!-- Tags -->
+        {{ if .Params.tags }}
+        <div class="mt-auto pt-4 flex flex-wrap gap-2">
+            {{ range .Params.tags }}
+            <a href="/tags/{{ . | urlize }}" class="bg-grt-red-500 text-grt-white px-2 py-1 text-xs hover:bg-grt-red-600 transition-colors">
+                {{ . }}
+            </a>
+            {{ end }}
+        </div>
+        {{ end }}
+    </div>
+</article> 

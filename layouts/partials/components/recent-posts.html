@@ -1,0 +1,24 @@
+<section class="bg-grt-dark-gray-800 py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-white mb-12 text-center">Recent Posts</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {{ $paginator := where .Site.RegularPages "Type" "posts" }}
+            {{ $postCount := len $paginator }}
+            
+            {{ if ge $postCount 8 }}
+                {{ range first 8 $paginator }}
+                    {{ partial "components/post-card.html" . }}
+                {{ end }}
+            {{ else if ge $postCount 4 }}
+                {{ range first 4 $paginator }}
+                    {{ partial "components/post-card.html" . }}
+                {{ end }}
+            {{ else }}
+                {{ range $paginator }}
+                    {{ partial "components/post-card.html" . }}
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</section> 

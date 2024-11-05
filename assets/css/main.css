@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+@layer components {
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+    body {
+      @apply text-neutral-900 bg-neutral-900;
+    }
+
+    .custom-scrollbar {
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: theme('colors.grt-gray.600') theme('colors.grt-gray.900');
+    }
+
+    /* Chrome, Edge, Safari */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: theme('colors.grt-gray.900');
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: theme('colors.grt-gray.600');
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: theme('colors.grt-gray.500');
+    }
+}
+
+@layer utilities {
+}
