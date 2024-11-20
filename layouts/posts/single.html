@@ -19,13 +19,6 @@
 
         <!-- Header Content -->
         <div class="relative container mx-auto px-4 text-center">
-            <!-- Category -->
-            {{ with .Params.category }}
-            <a href="/categories/{{ . | urlize }}" class="inline-block border border-grt-red-500 text-grt-red-500 px-3 py-1 text-sm uppercase tracking-wider transition-colors hover:bg-grt-red-500 hover:text-white mb-4">
-                {{ . }}
-            </a>
-            {{ end }}
-
             <!-- Title -->
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 max-w-4xl mx-auto">{{ .Title }}</h1>
 
@@ -36,7 +29,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <span>{{ . }}</span>
+                    <a href="/authors/{{ . | urlize }}" class="hover:text-grt-red-500 transition-colors">{{ . }}</a>
                 </div>
                 {{ end }}
 
@@ -113,10 +106,10 @@
                     <div class="space-y-3">
                         {{ $related := where (where (where .Site.RegularPages "Type" "posts") ".Permalink" "ne" .Permalink) "Params.tags" "intersect" .Params.tags | first 4 }}
                         {{ range $related }}
-                        <div class="group bg-grt-dark-gray-700 flex">
+                        <div class="group bg-grt-dark-gray-700 flex h-20">
                             <!-- Featured Image -->
                             {{ if and $.Site.Params.featuredImages (.Params.featured_image) }}
-                            <div class="w-24 h-24 flex-shrink-0">
+                            <div class="w-20 h-20 flex-shrink-0">
                                 <img 
                                     src="{{ .Params.featured_image }}" 
                                     alt="{{ .Title }}" 
@@ -126,43 +119,45 @@
                             {{ end }}
 
                             <!-- Content -->
-                            <a href="{{ .RelPermalink }}" class="block p-3 flex-grow">
-                                <!-- Row 1: Title -->
-                                <h4 class="text-white group-hover:text-grt-red-500 font-medium text-sm mb-2">{{ .Title }}</h4>
-                                
-                                <!-- Row 2: Metadata -->
-                                <div class="flex items-center gap-3 text-xs text-grt-gray-300 mb-2">
-                                    <time class="flex items-center whitespace-nowrap">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        {{ .Date.Format "Jan 2, 2006" }}
-                                    </time>
+                            <a href="{{ .RelPermalink }}" class="p-1">
+                                <div class="flex flex-col h-full justify-between">
+                                    <!-- Row 1: Title -->
+                                    <h4 class="text-white group-hover:text-grt-red-500 font-medium text-sm truncate">{{ .Title }}</h4>
                                     
-                                    <span class="flex items-center whitespace-nowrap">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        {{ .ReadingTime }} min
-                                    </span>
+                                    <!-- Row 2: Metadata -->
+                                    <div class="flex items-center gap-3 text-xs text-grt-gray-300">
+                                        <time class="flex items-center whitespace-nowrap">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            {{ .Date.Format "Jan 2, 2006" }}
+                                        </time>
+                                        
+                                        <span class="flex items-center whitespace-nowrap">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            {{ .ReadingTime }} min
+                                        </span>
+                                    </div>
 
-                                  <!-- Row 3: Tags -->
-                                  <div class="flex flex-wrap gap-1 items-center">
-                                      {{ $tags := .Params.tags }}
-                                      {{ range first 5 $tags }}
-                                      <a href="/tags/{{ . | urlize }}" class="bg-grt-red-500 text-grt-white px-1.5 py-0.5 text-[10px] hover:bg-grt-red-600 transition-colors">
-                                          {{ . }}
-                                      </a>
-                                      {{ end }}
-                                      {{ if gt (len $tags) 5 }}
-                                      <span class="text-[10px] text-grt-gray-300 flex items-center">
-                                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                          </svg>
-                                          {{ sub (len $tags) 5 }}
-                                      </span>
-                                      {{ end }}
-                                  </div>
+                                    <!-- Row 3: Tags -->
+                                    <div class="flex flex-wrap gap-1 items-center">
+                                        {{ $tags := .Params.tags }}
+                                        {{ range first 3 $tags }}
+                                        <a href="/tags/{{ . | urlize }}" class="bg-grt-red-500 text-grt-white px-1.5 py-0.5 text-[10px] hover:bg-grt-red-600 transition-colors">
+                                            {{ . }}
+                                        </a>
+                                        {{ end }}
+                                        {{ if gt (len $tags) 3 }}
+                                        <span class="text-[10px] text-grt-gray-300 flex items-center">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            {{ sub (len $tags) 3 }}
+                                        </span>
+                                        {{ end }}
+                                    </div>
                                 </div>
                             </a>
                         </div>
@@ -176,10 +171,10 @@
                     <div class="space-y-3">
                         {{ $recent := where (where .Site.RegularPages "Type" "posts") ".Permalink" "ne" .Permalink | first 4 }}
                         {{ range $recent }}
-                        <div class="group bg-grt-dark-gray-700 flex">
+                        <div class="group bg-grt-dark-gray-700 flex h-20">
                             <!-- Featured Image -->
                             {{ if and $.Site.Params.featuredImages (.Params.featured_image) }}
-                            <div class="w-24 h-24 flex-shrink-0">
+                            <div class="w-20 h-20 flex-shrink-0">
                                 <img 
                                     src="{{ .Params.featured_image }}" 
                                     alt="{{ .Title }}" 
@@ -189,43 +184,45 @@
                             {{ end }}
 
                             <!-- Content -->
-                            <a href="{{ .RelPermalink }}" class="block p-3 flex-grow">
-                                <!-- Row 1: Title -->
-                                <h4 class="text-white group-hover:text-grt-red-500 font-medium text-sm mb-2">{{ .Title }}</h4>
-                                
-                                <!-- Row 2: Metadata -->
-                                <div class="flex items-center gap-3 text-xs text-grt-gray-300 mb-2">
-                                    <time class="flex items-center whitespace-nowrap">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        {{ .Date.Format "Jan 2, 2006" }}
-                                    </time>
+                            <a href="{{ .RelPermalink }}" class="p-1">
+                                <div class="flex flex-col h-full justify-between">
+                                    <!-- Row 1: Title -->
+                                    <h4 class="text-white group-hover:text-grt-red-500 font-medium text-sm truncate">{{ .Title }}</h4>
                                     
-                                    <span class="flex items-center whitespace-nowrap">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        {{ .ReadingTime }} min
-                                    </span>
-                                </div>
+                                    <!-- Row 2: Metadata -->
+                                    <div class="flex items-center gap-3 text-xs text-grt-gray-300">
+                                        <time class="flex items-center whitespace-nowrap">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            {{ .Date.Format "Jan 2, 2006" }}
+                                        </time>
+                                        
+                                        <span class="flex items-center whitespace-nowrap">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            {{ .ReadingTime }} min
+                                        </span>
+                                    </div>
 
-                                <!-- Row 3: Tags -->
-                                <div class="flex flex-wrap gap-1 items-center">
-                                    {{ $tags := .Params.tags }}
-                                    {{ range first 5 $tags }}
-                                    <a href="/tags/{{ . | urlize }}" class="bg-grt-red-500 text-grt-white px-1.5 py-0.5 text-[10px] hover:bg-grt-red-600 transition-colors">
-                                        {{ . }}
-                                    </a>
-                                    {{ end }}
-                                    {{ if gt (len $tags) 5 }}
-                                    <span class="text-[10px] text-grt-gray-300 flex items-center">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
-                                        {{ sub (len $tags) 5 }}
-                                    </span>
-                                    {{ end }}
+                                    <!-- Row 3: Tags -->
+                                    <div class="flex flex-wrap gap-1 items-center">
+                                        {{ $tags := .Params.tags }}
+                                        {{ range first 3 $tags }}
+                                        <a href="/tags/{{ . | urlize }}" class="bg-grt-red-500 text-grt-white px-1.5 py-0.5 text-[10px] hover:bg-grt-red-600 transition-colors">
+                                            {{ . }}
+                                        </a>
+                                        {{ end }}
+                                        {{ if gt (len $tags) 3 }}
+                                        <span class="text-[10px] text-grt-gray-300 flex items-center">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            {{ sub (len $tags) 3 }}
+                                        </span>
+                                        {{ end }}
+                                    </div>
                                 </div>
                             </a>
                         </div>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}" class="h-screen">
 <head>
   {{ partial "head.html" . }}
 </head>
-<body class="bg-grt-gray-900">
-  <div class="h-screen overflow-y-scroll custom-scrollbar">
-    <header>
-      {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
-    </header>
+<body class="bg-grt-gray-900 overflow-hidden h-screen">
+  <header>
+    {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+  </header>
+  <div class="mt-16 overflow-y-scroll custom-scrollbar h-screen">
     <main>
       {{ block "main" . }}{{ end }}
     </main>
